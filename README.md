@@ -1,4 +1,4 @@
-#Wifi-Enabled-Accelerometer
+#Wifi Enabled Accelerometer
 UNT ELET Senior Design Project
 
 This repo is the collection of work done by Brandon Dunson and Chris Harris as their Senior Design project at The University of North Texas during the final year of the Electronics Engineering Degree plan.
