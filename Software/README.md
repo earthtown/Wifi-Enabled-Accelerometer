@@ -1,1 +1,1 @@
-This folder contains all the software that will be used for this project. Currently the Eclipse IDE (windows) is included here. The Intel Edison also works with the Arduino IDE along with Intel's SDK that uses Javascript.
+This folder contains all the software that will be used for this project. Currently the Eclipse IDE (windows) is included here. The Intel Edison also works with the Arduino IDE along with Intel's SDK that uses Javascript. However, we will be using pure C as our programming language.
