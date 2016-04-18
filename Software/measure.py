@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 
 import cgi
+import cgitb;
+cgitb.enable()
+
 from subprocess import call
 
 import MPU6050
@@ -11,6 +14,8 @@ import sys
 import time
 import datetime
 import SDL_DS1307
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.cbook as cbook
 
@@ -32,14 +37,15 @@ def capture_data(InputSampleNumber):
 	time.sleep(0.01)
 	
 	ds1307 = SDL_DS1307.SDL_DS1307(1, 0x68)
-	ds1307.write_now()
+	#ds1307.write_now()
 	
 	print "Capturing {0} samples at {1} samples/sec".format(TargetSampleNumber, mpu6050.SampleRate)
 		
 	mpu6050.resetFifo()
 	mpu6050.enableFifo(True)
 	time.sleep(0.01)
-	starttime = ds1307.read_datetime()
+	#starttime = ds1307.read_datetime()
+	starttime = datetime.datetime.now()
 	
 	Values = []
 	Total = 0
@@ -78,8 +84,9 @@ def capture_data(InputSampleNumber):
 	    quit()
 	
 	  print "Saving RawData.txt  file."
+	  filename = "data/RawData%s.txt" % starttime
 	  
-	  FO = open("RawData%s.txt" % starttime,"w")
+	  FO = open(filename,"w")
 	  FO.write("Time\tGx\tGy\tGz\tTemp\tGyrox\tGyroy\tGyroz\n")
 	  fftdata = []
 	  for loop in range (TargetSampleNumber):
@@ -93,10 +100,10 @@ def capture_data(InputSampleNumber):
 	
 	  print "Saving Data Plot"
 	
-	  timems = np.genfromtxt('RawData%s.txt' % starttime, delimiter='\t', dtype=None, usecols=[0], skip_header=1)
-	  accx = np.genfromtxt('RawData%s.txt' % starttime, delimiter='\t', dtype=None, usecols=[1], skip_header=1)
-	  accy = np.genfromtxt('RawData%s.txt' % starttime, delimiter='\t', dtype=None, usecols=[2], skip_header=1)
-	  accz = np.genfromtxt('RawData%s.txt' % starttime, delimiter='\t', dtype=None, usecols=[3], skip_header=1)
+	  timems = np.genfromtxt(filename, delimiter='\t', dtype=None, usecols=[0], skip_header=1)
+	  accx = np.genfromtxt(filename, delimiter='\t', dtype=None, usecols=[1], skip_header=1)
+	  accy = np.genfromtxt(filename, delimiter='\t', dtype=None, usecols=[2], skip_header=1)
+	  accz = np.genfromtxt(filename, delimiter='\t', dtype=None, usecols=[3], skip_header=1)
 
 	  fig, (ax0, ax1, ax2) = plt.subplots(nrows=3)
 	
@@ -122,8 +129,12 @@ def capture_data(InputSampleNumber):
 	  for label in (ax0.get_yticklabels() + ax1.get_yticklabels() + ax2.get_yticklabels()):
 	      label.set_fontsize(10)
 	
-	  fig.savefig('DataPlot%s' % starttime)
+	  fig.savefig('data/DataPlot%s.png' % starttime, format='png')
 	
+# here you would possibly print out prettier html. 
+# maybe an img src = 
+# possibly you don't even write the png, you just output the mime-type directly
+# anyway, here is where your output presentation logic goes.
 	print "Done!"
 	
 
